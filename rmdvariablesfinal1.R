@@ -330,7 +330,6 @@ cor(london_data$price, london_data$dist_to_big_ben_km, use='pairwise.complete.ob
 url <- "https://api.tfl.gov.uk/StopPoint/Mode/tube"
 # Query the API and get the raw response text
 response <- GET(url)
-install.packages('httr')
 library(httr)
 raw_text <- content(response, as = "text", encoding = "UTF-8")
 # Parsing response
