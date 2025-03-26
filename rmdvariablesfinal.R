@@ -150,7 +150,7 @@ plot(barplot2)
 #checking for location features through heat map
 # Calculate mean price per borough
 # Average price per borough
-borough_prices <- london_data2 %>%
+borough_prices <- london_data %>%
   group_by(neighbourhood_cleansed) %>%
   summarise(avg_price = mean(price, na.rm = TRUE))
 
@@ -340,7 +340,7 @@ tube_stations <- as.data.frame(data$stopPoints)
 # Select only the relevant columns
 tube_stations <- tube_stations[, c("id", "commonName", "lat", "lon")]
 #create a loop which is going to create a closest tube station as well as distance in kilometers from station
-# Convert london_data2 to an sf object (assuming it has 'longitude' and 'latitude')
+# Convert london_data to an sf object (assuming it has 'longitude' and 'latitude')
 london_sf <- st_as_sf(london_data, coords = c("longitude", "latitude"), crs = 4326)
 tube_sf <- st_as_sf(tube_stations, coords = c("lon", "lat"), crs = 4326)
 london_sf <- st_transform(london_sf, 27700)
