@@ -42,7 +42,7 @@ london_data <- london_data %>%
 #converting date variables to correct format and measuring days since first listing
 london_data$host_since <- as.Date(london_data$host_since, format = "%Y-%m-%d")
 london_data$days_since <- as.numeric(Sys.Date() - london_data$host_since)
-range(london_data2$host_since)
+range(london_data$host_since)
 
 london_data$last_scraped <- as.Date(london_data$last_scraped, format = "%Y-%m-%d")
 range(london_data$last_scraped, na.rm = TRUE)
