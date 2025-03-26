@@ -74,7 +74,7 @@ sample_data <- london_data %>% sample_frac(0.1)
 #remove data where price is missing
 sample_data_clean <- sample_data %>% filter(!is.na(price))
 
-num_vars <- c("review_scores_rating", "review_scores_accuracy","review_scores_location", "review_scores_communication", "review_scores_cleanliness", "review_scores_checkin", "review_scores_value","host_total_listings_count", "host_response_rate", "host_accptance_rate")
+num_vars <- c("review_scores_rating", "review_scores_accuracy","review_scores_location", "review_scores_communication", "review_scores_cleanliness", "review_scores_checkin", "review_scores_value","host_total_listings_count", "host_response_rate", "host_acceptance_rate")
 sample_data_long <- sample_data_clean %>%
   select(price, all_of(num_vars)) %>%
   pivot_longer(cols = all_of(num_vars), names_to = "Variable", values_to = "Value")
