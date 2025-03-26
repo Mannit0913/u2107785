@@ -329,8 +329,9 @@ cor(london_data$price, london_data$dist_to_big_ben_km, use='pairwise.complete.ob
 # Define the URL for tube stops from the TfL API
 url <- "https://api.tfl.gov.uk/StopPoint/Mode/tube"
 # Query the API and get the raw response text
-library(httr)
 response <- GET(url)
+install.packages('httr')
+library(httr)
 raw_text <- content(response, as = "text", encoding = "UTF-8")
 # Parsing response
 library(sf) 
@@ -386,3 +387,46 @@ word_cols <- c(top_words, top_words_amenities, top_words_description)
 london_data$important_words_score <- rowSums(dtm_name_df[, top_words]) +
   rowSums(dtm_amenities_df[, top_words_amenities]) +
   rowSums(dtm_description_df[, top_words_description])
+
+
+
+#experimenting adding this to markdown file
+london_data$logaccommodates<-log(london_data$accommodates)
+london_data$logbedrooms<-log(london_data$bedrooms + 1)
+london_data$logbeds<-log(london_data$beds + 1)
+london_data$logbathrooms<-log(london_data$bathrooms + 1)
+london_data$logprice<-log(london_data$price)
+
+london_data$logdistancecentre<-log(london_data$dist_to_big_ben_km)
+
+
+num_vars <- c("vacant_ratio", "review_scores_location", "logbedrooms", "logbeds","logbathrooms","distance_to_tube", "logaccommodates", "logdistancecentre")
+
+
+
+# Filter to remove NA prices
+london_data_clean <- london_data %>%
+  filter(!is.na(price))
+
+london_data_clean<-st_drop_geometry(london_data_clean)
+
+# Replace NA values in numeric variables with mean
+london_data_clean[num_vars] <- lapply(london_data_clean[num_vars], function(x) {
+  x[is.na(x)] <- mean(x, na.rm = TRUE)
+  return(x)
+})
+
+# Make categorical variables factors
+cat_vars<-c("neighbourhood_cleansed", "room_type", "property_type", "last_scraped")
+london_data <- london_data %>%
+  mutate(across(all_of(cat_vars), as.factor))
+
+# Define predictors
+predictors <- c(num_vars, cat_vars)
+
+# Create formula
+formula <- as.formula(paste("price ~", paste(predictors, collapse = " + ")))
+
+#naive regression-baseline model
+model1<-lm(formula, data=london_data_clean)
+summary(model1)
