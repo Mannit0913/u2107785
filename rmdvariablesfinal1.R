@@ -429,4 +429,7 @@ formula <- as.formula(paste("price ~", paste(predictors, collapse = " + ")))
 
 #naive regression-baseline model
 model1<-lm(formula, data=london_data_clean)
-summary(model1)
+
+#log-log model
+formula2 <- as.formula(paste("logprice ~", paste(predictors, collapse = " + ")))
+model2<-lm(formula2, data=london_data_clean)
